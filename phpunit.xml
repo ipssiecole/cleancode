@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+    colors="true"
+    bootstrap="./bootstrap.php"
+    stopOnFailure="false"
+    convertErrorsToException="true">
+
+    <testsuites>
+        <testsuite name="app">
+            <directory>./test/Ipssi</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="false">
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory suffix=".php">./vendor/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html"
+             target="./report/phpunit"
+             charset="UTF-8"
+             yui="true"
+             highlight="true"></log>
+
+        <log type="coverage-text"
+             target="php://stdout"
+             showUncoveredFiles="false"></log>
+    </logging>
+
+</phpunit>
