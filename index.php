@@ -2,17 +2,15 @@
 
 require 'vendor/autoload.php';
 
-$errHandler = new \Ipssi\ErrorException();
+$service = new \Ipssi\Service\Container();
 
-//try {
-//    trigger_error('my error');
-//} catch (Exception $e) {
-//    echo $e;
-//}
+require_once 'services.php';
 
-$logger = new \Ipssi\Logger\File('app.log');
-$logger->setFormater(new \Ipssi\Logger\Formatter\Error());
 
-$logger->emergency('Mon message à logger: {test}', ['test' => 'hello']);
+$logger = $service->get('logger');
 
-$service->get('logger')->emergency();
+var_dump($logger);
+
+//$logger->emergency('Mon message à logger: {test}', ['test' => 'hello']);
+
+//$service->get('logger')->emergency();

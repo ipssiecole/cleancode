@@ -20,7 +20,7 @@ class Container implements ContainerInterface
         if (!$this->has($id)) {
             throw new Exception("service $id does not exits");
         }
-        return $this->services[$id]();
+        return $this->services[$id]($this);
     }
 
     public function has($id)
