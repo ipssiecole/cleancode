@@ -3,6 +3,7 @@
 namespace Ipssi\Logger;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
 
 class File implements LoggerInterface
 {
@@ -11,9 +12,12 @@ class File implements LoggerInterface
      */
     private $filename;
 
-    private $formater;
+    /**
+     * @var Formatter
+     */
+    private $formatter;
 
-    use \Psr\Log\LoggerTrait;
+    use LoggerTrait;
 
     /**
      * File constructor.
@@ -24,9 +28,14 @@ class File implements LoggerInterface
         $this->setFilename($filename);
     }
 
-    public function setFormater(Formater $formater)
+    /**
+     * @param Formatter $formatter.
+     * @return File
+     */
+    public function setFormater(Formatter $formatter): File
     {
-        $this->formater->format();
+        $this->formatter = $formatter;
+        return $this;
     }
 
     /**
@@ -55,26 +64,12 @@ class File implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
+        $msg = $this->formatter->format($level, Message::interpolate($message, $context));
+
         return file_put_contents(
             $this->getFilename(),
-            $this->interpolate($message, $context) . PHP_EOL,
+            $msg . PHP_EOL,
             FILE_APPEND
         );
-    }
-
-    /**
-     * @param $message
-     * @param array $context
-     * @return string
-     */
-    protected function interpolate($message, array $context = array())
-    {
-        $replace = array();
-        foreach ($context as $key => $val) {
-            if (!is_array($val) && (!is_object($val) || method_exists($val, '__toString'))) {
-                $replace['{' . $key . '}'] = $val;
-            }
-        }
-        return strtr($message, $replace);
     }
 }

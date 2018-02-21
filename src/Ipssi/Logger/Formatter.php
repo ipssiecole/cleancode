@@ -4,5 +4,5 @@ namespace Ipssi\Logger;
 
 interface Formatter
 {
-    public function format(string $message, array $context = array()): string;
+    public function format(string $level, string $message, array $context = array()): string;
 }
