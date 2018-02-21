@@ -30,7 +30,7 @@ class BankAccount
     /**
      * Increase balance.
      *
-     * @param float $balance
+     * @param  float $balance
      * @return BankAccount
      * @throws InvalidArgumentException
      */
@@ -45,7 +45,7 @@ class BankAccount
     /**
      * Decrease balance.
      *
-     * @param float $balance
+     * @param  float $balance
      * @return BankAccount
      * @throws InvalidArgumentException
      */
