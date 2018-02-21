@@ -2,4 +2,5 @@
 
 require 'vendor/autoload.php';
 
-new \Ipssi\Hello();
+$logger = new \Ipssi\Logger\File('app.log');
+$logger->emergency('Mon message à logger: {test}', ['test' => 'hello']);

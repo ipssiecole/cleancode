@@ -7,75 +7,74 @@ use Psr\Log\LoggerInterface;
 class File implements LoggerInterface
 {
     /**
-     * @inheritDoc
+     * @var string
      */
-    public function emergency($message, array $context = array())
+    private $filename;
+
+    private $formater;
+
+    use \Psr\Log\LoggerTrait;
+
+    /**
+     * File constructor.
+     * @param string $filename
+     */
+    public function __construct(string $filename)
     {
-        // TODO: Implement emergency() method.
+        $this->setFilename($filename);
+    }
+
+    public function setFormater(Formater $formater)
+    {
+        $this->formater->format();
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
-    public function alert($message, array $context = array())
+    public function getFilename(): string
     {
-        // TODO: Implement alert() method.
+        return $this->filename;
     }
 
     /**
-     * @inheritDoc
+     * @param string $filename
+     * @return File
      */
-    public function critical($message, array $context = array())
+    public function setFilename(string $filename)
     {
-        // TODO: Implement critical() method.
+        $this->filename = $filename;
+        return $this;
     }
 
     /**
-     * @inheritDoc
-     */
-    public function error($message, array $context = array())
-    {
-        // TODO: Implement error() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function warning($message, array $context = array())
-    {
-        // TODO: Implement warning() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function notice($message, array $context = array())
-    {
-        // TODO: Implement notice() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function info($message, array $context = array())
-    {
-        // TODO: Implement info() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function debug($message, array $context = array())
-    {
-        // TODO: Implement debug() method.
-    }
-
-    /**
-     * @inheritDoc
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     * @return bool|int|void
      */
     public function log($level, $message, array $context = array())
     {
-        // TODO: Implement log() method.
+        return file_put_contents(
+            $this->getFilename(),
+            $this->interpolate($message, $context) . PHP_EOL,
+            FILE_APPEND
+        );
     }
 
+    /**
+     * @param $message
+     * @param array $context
+     * @return string
+     */
+    protected function interpolate($message, array $context = array())
+    {
+        $replace = array();
+        foreach ($context as $key => $val) {
+            if (!is_array($val) && (!is_object($val) || method_exists($val, '__toString'))) {
+                $replace['{' . $key . '}'] = $val;
+            }
+        }
+        return strtr($message, $replace);
+    }
 }
