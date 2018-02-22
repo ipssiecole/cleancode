@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  selenium:
+    container_name: 'selenium'
+    image: 'selenium/standalone-chrome-debug'
+    volumes:
+      - '/dev/shm:/dev/shm'
+    ports:
+      - '4444:4444'
+      - '37810:5900'
+  app:
+    container_name: 'ipssi.com'
+    image: 'php:7.2.2-fpm'
+    volumes:
+      - './:/var/www/html'
+    ports:
+      - '8080:80'
+    command: php -S="ipssi.com:80" -t="/var/www/html"
