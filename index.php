@@ -6,7 +6,6 @@ $service = new \Ipssi\Service\Container();
 
 require_once 'services.php';
 
-
 $logger = $service->get('logger');
 
 var_dump($logger);
