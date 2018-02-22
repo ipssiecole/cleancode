@@ -22,11 +22,29 @@ class ProductRepository
 
         $sql = 'SELECT * FROM product WHERE id=?';
         $stmt = $this->getPDO()->prepare($sql);
+        $product = null;
 
         if ($stmt->execute([$id])) {
-            $product = $stmt->fetch(PDO::FETCH_OBJ);
-            return $product;
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            if ($result) {
+                $product = $this->mapToProduct($result);
+            }
         }
+
+        return $product;
+    }
+
+    /**
+     * @param \stdClass $product
+     * @return Product
+     */
+    public function mapToProduct(\stdClass $product)
+    {
+        return new Product(
+            $product->id,
+            $product->name,
+            $product->price
+        );
     }
 
     protected function getPDO(): PDO
