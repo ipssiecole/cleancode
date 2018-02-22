@@ -14,10 +14,18 @@ class ProductRepository
         $this->pdo = $pdo;
     }
 
-    public function find($id)
+    public function find($id): ?Product
     {
         if ($id === '' || $id <= 0) {
             throw new InvalidArgumentException("id $id is invalid");
+        }
+
+        $sql = 'SELECT * FROM product WHERE id=?';
+        $stmt = $this->getPDO()->prepare($sql);
+
+        if ($stmt->execute([$id])) {
+            $product = $stmt->fetch(PDO::FETCH_OBJ);
+            return $product;
         }
     }
 

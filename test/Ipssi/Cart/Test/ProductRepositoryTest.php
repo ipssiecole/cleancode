@@ -7,6 +7,7 @@ use Ipssi\Cart\ProductRepository;
 use TypeError;
 use InvalidArgumentException;
 use PDO;
+use PDOStatement;
 
 class ProductRepositoryTest extends TestCase
 {
@@ -24,12 +25,44 @@ class ProductRepositoryTest extends TestCase
         $this->assertInstanceOf(PDO::class, $pdoMock);
     }
 
-    public function testFindOneWithInvalidID()
+    public function testFindOneWithInvalidId()
     {
         $this->expectException(InvalidArgumentException::class);
         $pdoMock = $this->createMock(PDO::class);
 
         $repo = new ProductRepository($pdoMock);
-        $product = $repo->find('');
+        $repo->find('');
+        $repo->find(-10);
+    }
+
+    public function testFindOneByIdReturnsNull()
+    {
+        $pdoStmt = $this->getPDOStatementMock();
+        $pdoStmt->expects($this->once())->method('execute')->willReturn(true);
+        $pdoStmt->expects($this->once())->method('fetch')->willReturn(null);
+
+        $pdo = $this->getPDOMock($pdoStmt);
+        $repo = new ProductRepository($pdo);
+        $product = $repo->find(50);
+        $this->assertNull($product);
+    }
+
+    protected function getPDOMock($pdoStmt)
+    {
+        $pdoMock = $this->getMockBuilder(PDO::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['prepare'])
+            ->getMock();
+
+        $pdoMock->method('prepare')->willReturn($pdoStmt);
+
+        return $pdoMock;
+    }
+
+    protected function getPDOStatementMock()
+    {
+        return $this->getMockBuilder(PDOStatement::class)
+            ->setMethods(['execute', 'fetch', 'fetchAll'])
+            ->getMock();
     }
 }
