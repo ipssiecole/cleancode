@@ -18,7 +18,7 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - ./vendor/bin/phpunit --colors always --configuration phpunit
+  - ./vendor/bin/phpunit --colors always --configuration phpunit.xml
 
 after_script:
   - docker-compose down -v
