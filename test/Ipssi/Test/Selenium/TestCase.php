@@ -9,6 +9,11 @@ class TestCase extends \PHPUnit_Extensions_Selenium2TestCase
         $this->setHost('127.0.0.1');
         $this->setPort(4444);
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://ipssi.com');
+        $this->setBrowserUrl($this->getHostname());
+    }
+
+    public function getHostname()
+    {
+        return 'http://ipssi.com';
     }
 }

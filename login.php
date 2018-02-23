@@ -1,4 +1,13 @@
-<!doctype html>
+<?php
+
+$username = $_POST['username'] ?? null;
+$password = $_POST['password'] ?? null;
+
+if ($username === 'toto' && $password === '0000') {
+    header('Location: hello.php');
+}
+
+?><!doctype html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
