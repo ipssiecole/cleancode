@@ -30,5 +30,8 @@
         "friendsofphp/php-cs-fixer": "^2.10",
         "phpunit/php-code-coverage": "5.3",
         "phpunit/phpunit-selenium": "^4.1"
+    },
+    "scripts": {
+        "test": "phpunit --colors=always --configuration phpunit.xml"
     }
 }
