@@ -38,4 +38,17 @@ class LoginTest extends TestCase
 
         $this->assertEquals('Login', $this->title());
     }
+
+    public function testValidForm()
+    {
+        $this->url('login.php');
+        $form = $this->byTag('form');
+
+        $this->byName('username')->value('toto');
+        $this->byName('password')->value('0000');
+
+        $form->submit();
+
+        $this->assertEquals('Hello, World', $this->title());
+    }
 }
